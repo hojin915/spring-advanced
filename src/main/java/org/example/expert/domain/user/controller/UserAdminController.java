@@ -1,7 +1,7 @@
 package org.example.expert.domain.user.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.example.expert.config.LogAdmin;
+import org.example.expert.domain.common.annotation.LogAdmin;
 import org.example.expert.domain.user.dto.request.UserRoleChangeRequest;
 import org.example.expert.domain.user.service.UserAdminService;
 import org.springframework.http.HttpStatus;

@@ -7,6 +7,7 @@ import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.example.expert.domain.common.annotation.LogAdmin;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -28,7 +29,7 @@ public class AdminLoggingAspect {
 
     // 적용 위치(Pointcut), 해당 위치에 있는 어노테이션을 가지고 있는 메서드인 동시에
     // 접근 범위가 public 인 모든 메서드의 호출 전, 후
-    @Around("@annotation(org.example.expert.config.LogAdmin) && execution(public * *(..))")
+    @Around("@annotation(org.example.expert.domain.common.annotation.LogAdmin) && execution(public * *(..))")
     public Object logAdmin(ProceedingJoinPoint joinPoint) throws Throwable{
         // 메서드 정보 추출
         MethodSignature signature = (MethodSignature) joinPoint.getSignature();
