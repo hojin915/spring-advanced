@@ -98,7 +98,8 @@ class ManagerServiceTest {
     }
 
     @Test // 테스트코드 샘플
-    void todo가_정상적으로_등록된다() {
+    // 테스트명 수정
+    void Manger_관계가_정상적으로_등록된다() {
         // given
         AuthUser authUser = new AuthUser(1L, "a@a.com", UserRole.USER);
         User user = User.fromAuthUser(authUser);  // 일정을 만든 유저
