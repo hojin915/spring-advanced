@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.expert.domain.user.enums.UserRole;
+import org.springframework.util.AntPathMatcher;
 
 import java.io.IOException;
 
@@ -19,6 +20,9 @@ import java.io.IOException;
 public class JwtFilter implements Filter {
 
     private final JwtUtil jwtUtil;
+
+    // PathMatcher 구현체 추가
+    private final AntPathMatcher pathMatcher = new AntPathMatcher();
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -62,7 +66,8 @@ public class JwtFilter implements Filter {
             httpRequest.setAttribute("userRole", claims.get("userRole"));
 
             // admin 요청 경로가 일치하지 않음 (Interceptor 의 경우 "/admin/**")
-            if (url.startsWith("/admin")) {
+            // String.startWith -> pathMatcher.match 로 변경
+            if (pathMatcher.match("/admin/**", url)) {
                 // 관리자 권한이 없는 경우 403을 반환합니다.
                 if (!UserRole.ADMIN.equals(userRole)) {
                     httpResponse.sendError(HttpServletResponse.SC_FORBIDDEN, "관리자 권한이 없습니다.");
