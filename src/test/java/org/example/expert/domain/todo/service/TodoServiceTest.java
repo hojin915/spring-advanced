@@ -18,9 +18,12 @@ import org.springframework.data.domain.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -82,6 +85,7 @@ public class TodoServiceTest {
 
         Page<Todo> testPage = new PageImpl<>(testList, pageable, 1);
         when(todoRepository.findAllByOrderByModifiedAtDesc(any(Pageable.class))).thenReturn(testPage);
+
         //when
         Page<TodoResponse> response = todoService.getTodos(page, size);
 
@@ -100,5 +104,32 @@ public class TodoServiceTest {
         assertEquals((testList.size() / size) + 1,response.getTotalPages());
 
         verify(todoRepository).findAllByOrderByModifiedAtDesc(pageable);
+    }
+
+    @Test
+    public void todo_정상조회() {
+        //given
+        User testUser = new User("test@example.com", "password", UserRole.USER);
+        testUser.setId(2L);
+        long todoId = 2L;
+
+        when(todoRepository.findByIdWithUser(anyLong())).thenAnswer(i -> {
+            Todo testTodo = new Todo("title", "contents", "weather", testUser);
+            testTodo.setId(i.getArgument(0));
+            return Optional.of(testTodo);
+        });
+
+        //when
+        TodoResponse response = todoService.getTodo(todoId);
+
+        //then
+        assertEquals(todoId, response.getId());
+        assertEquals("title", response.getTitle());
+        assertEquals("contents", response.getContents());
+        assertEquals("weather", response.getWeather());
+        assertEquals(2L, response.getUser().getId());
+        assertEquals("test@example.com", response.getUser().getEmail());
+
+        verify(todoRepository).findByIdWithUser(anyLong());
     }
 }
