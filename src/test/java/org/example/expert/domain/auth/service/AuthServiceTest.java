@@ -22,6 +22,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -68,6 +69,8 @@ public class AuthServiceTest {
 
         //then
         assertEquals("mocked_jwt_token", response.getBearerToken());
+        verify(jwtUtil).createToken(anyLong(), anyString(), eq(UserRole.USER));
+        verify(userRepository).save(any(User.class));
     }
 
     @Test
@@ -90,6 +93,7 @@ public class AuthServiceTest {
 
         //then
         assertEquals("mocked_jwt_token", response.getBearerToken());
+        verify(jwtUtil).createToken(anyLong(), anyString(), eq(UserRole.USER));
     }
 
     @Test

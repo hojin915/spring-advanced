@@ -1,6 +1,8 @@
 package org.example.expert.domain.todo.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,8 +12,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TodoSaveRequest {
 
-    @NotBlank
+    @NotNull
+    @Size(min = 1, max = 255)
     private String title;
-    @NotBlank
+    @NotNull
+    @Size(min = 1, max = 255)
     private String contents;
 }

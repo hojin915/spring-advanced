@@ -38,8 +38,11 @@ public class TodoServiceTest {
     @Test
     public void todo_정상등록 () {
         //given
+        String title = "Title";
+        String contents = "Contents";
+
         AuthUser authUser = new AuthUser(1L, "test@example.com", UserRole.USER);
-        TodoSaveRequest request = new TodoSaveRequest("Title", "Contents");
+        TodoSaveRequest request = new TodoSaveRequest(title, contents);
 
         when(weatherClient.getTodayWeather()).thenReturn("TodayWeather");
         when(todoRepository.save(any(Todo.class))).thenAnswer(i -> {
@@ -53,8 +56,8 @@ public class TodoServiceTest {
 
         //then
         assertEquals(1L, response.getId());
-        assertEquals("Title", response.getTitle());
-        assertEquals("Contents", response.getContents());
+        assertEquals(title, response.getTitle());
+        assertEquals(contents, response.getContents());
         assertEquals("TodayWeather", response.getWeather());
         assertEquals(1L, response.getUser().getId());
         assertEquals("test@example.com", response.getUser().getEmail());
